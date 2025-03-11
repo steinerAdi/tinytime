@@ -36,8 +36,7 @@ tinyUnixType tiny_getUnixTime(const tinyTimeType *tm) {
 #define CORRECTION_OFFSET (1600)
   const uint16_t currentYear = tm->year + TINY_YEAR_OFFSET;
   const uint16_t unixYearDiff = currentYear - TINY_UNIX_YEAR_BEGIN;
-  uint16_t leap_years = unixYearDiff / LEAP_YEAR_FREQUENCY - (tm->year) / LEAP_YEAR_REMOVED + (currentYear - CORRECTION_OFFSET) / LEAP_YEAR_CORRECTION;
-  printf("Diff %u => Leap years %d\n", unixYearDiff, leap_years);
+  uint16_t leap_years = (unixYearDiff + 2) / LEAP_YEAR_FREQUENCY - (tm->year) / LEAP_YEAR_REMOVED + (currentYear - CORRECTION_OFFSET) / LEAP_YEAR_CORRECTION;
 
   tinyUnixType days = (tinyUnixType)unixYearDiff * TINY_ONE_YEAR_IN_DAYS + leap_years;
 
@@ -122,7 +121,7 @@ void tiny_getFormat(const tinyTimeType *tm, char *buf, uint32_t bufSize) {
 }
 
 uint8_t tiny_isLeapYear(const uint16_t year) {
-  return (0 == (year % LEAP_YEAR_FREQUENCY) && (year % LEAP_YEAR_REMOVED != 0 || 0 == (year + TINY_YEAR_OFFSET) % LEAP_YEAR_CORRECTION));
+  return (0 == (year % LEAP_YEAR_FREQUENCY) && (year % LEAP_YEAR_REMOVED != 0 || 0 == (year) % LEAP_YEAR_CORRECTION));
 }
 
 uint8_t tiny_getMonthDays(const uint16_t year, const uint8_t month) {
