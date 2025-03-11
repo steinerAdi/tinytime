@@ -36,13 +36,13 @@ tinyUnixType tiny_getUnixTime(const tinyTimeType *tm) {
   }
 #define CENTURY_CORRECTION_OFFSET (1900)
 #define FOUR_CENTURY_CORRECTION_OFFSET (1600)
-#define FIRST_LEAPYEAR_OFFSET (2)
+#define FIRST_LEAP_YEAR_OFFSET (1)
 
-  const uint16_t currentYear = tm->year;
-  const uint16_t unixYearDiff = currentYear - TINY_UNIX_YEAR_BEGIN;
-  uint16_t leap_years = (unixYearDiff + FIRST_LEAPYEAR_OFFSET) / LEAP_YEAR_FREQUENCY - (tm->year - CENTURY_CORRECTION_OFFSET) / LEAP_YEAR_REMOVED + (currentYear - FOUR_CENTURY_CORRECTION_OFFSET) / LEAP_YEAR_CORRECTION;
+  const uint16_t unixYearDiff = tm->year - TINY_UNIX_YEAR_BEGIN;
+  const uint16_t leapYearCheck = tm->year - FIRST_LEAP_YEAR_OFFSET; // Used to include last year, this year will be included in
+  uint16_t numberOfLeapYears = (unixYearDiff + FIRST_LEAP_YEAR_OFFSET) / LEAP_YEAR_FREQUENCY - (leapYearCheck - CENTURY_CORRECTION_OFFSET) / LEAP_YEAR_REMOVED + (leapYearCheck - FOUR_CENTURY_CORRECTION_OFFSET) / LEAP_YEAR_CORRECTION;
 
-  tinyUnixType days = (tinyUnixType)unixYearDiff * TINY_ONE_YEAR_IN_DAYS + leap_years;
+  tinyUnixType days = (tinyUnixType)unixYearDiff * TINY_ONE_YEAR_IN_DAYS + numberOfLeapYears;
 
   for (uint8_t i = 0; i < tm->month; i++) {
     days += (tinyUnixType)tiny_getMonthDays(tm->year, i);
