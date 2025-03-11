@@ -67,7 +67,7 @@ typedef struct {
   uint8_t min;  ///< Minutes after hour ranged from 0 - 59
   uint8_t hour; ///< Hour since midnight ranged from 0 - 23
   /* Date informations */
-  uint8_t monthDay; ///< Day in the month range depending to the current month
+  uint8_t monthDay; ///< Day in the month range depending from 1 to the current month
   uint8_t month;    ///< Month of the current year, ranged from 0 - 11
   uint16_t year;    ///< Current year since 1900.
   /* Additional Date informations */
@@ -90,7 +90,7 @@ typedef uint64_t tinyUnixType;
 
 tinyUnixType tiny_getUnixTime(const tinyTimeType *tm);
 
-void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType src);
+void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime);
 
 void tiny_getFormat(const tinyTimeType *tm, char *buf, uint32_t bufSize);
 

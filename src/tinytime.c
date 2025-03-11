@@ -37,17 +37,54 @@ tinyUnixType tiny_getUnixTime(const tinyTimeType *tm) {
   const uint16_t unixYearDiff = currentYear - TINY_UNIX_YEAR_BEGIN;
   uint16_t leap_years = unixYearDiff / LEAP_YEAR_FREQUENCY - (tm->year) / LEAP_YEAR_REMOVED + (currentYear - CORRECTION_OFFSET) / LEAP_YEAR_CORRECTION;
 
-  uint64_t days = (uint64_t)unixYearDiff * TINY_ONE_YEAR_IN_DAYS + leap_years;
+  tinyUnixType days = (tinyUnixType)unixYearDiff * TINY_ONE_YEAR_IN_DAYS + leap_years;
 
   for (uint8_t i = 0; i < tm->month; i++) {
-    days += (uint64_t)tiny_getMonthDays(tm->year, i);
+    days += (tinyUnixType)tiny_getMonthDays(tm->year, i);
   }
 
-  days += (uint64_t)tm->monthDay;
+  days += (tinyUnixType)tm->monthDay;
   return days * TINY_ONE_DAY_IN_SEC + tm->hour * TINY_ONE_HOUR_IN_SEC + tm->min * TINY_ONE_MIN_IN_SEC + tm->sec;
 }
 
-void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType src) {
+void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime) {
+  if (NULL == tm) {
+    return;
+  }
+  // Get base values
+  uint64_t days = unixTime / TINY_ONE_DAY_IN_SEC;
+  uint64_t secInDay = unixTime % TINY_ONE_DAY_IN_SEC;
+  // Set current daytime
+  tm->hour = (uint8_t)(secInDay / TINY_ONE_DAY_IN_SEC);
+  tm->min = (uint8_t)((secInDay % TINY_ONE_DAY_IN_SEC) / TINY_ONE_MIN_IN_SEC);
+  tm->sec = (uint8_t)(secInDay % TINY_ONE_MIN_IN_SEC);
+  // Calculate Weekday, First day was a thursday (1.1.1970)
+  tm->weakDay = (days + TINY_THUR) % TINY_MAX_WEAKDAYS;
+  // Get current year, move throw all years
+  uint16_t year = TINY_UNIX_YEAR_BEGIN;
+  while (1) {
+    uint64_t daysInYear = TINY_ONE_YEAR_IN_DAYS + tiny_isLeapYear(year);
+    if (days < daysInYear) { //
+      break;
+    }
+    days -= daysInYear; // Decrement the current year days
+    year++;             // Increment the year
+  }
+  // Set year and the current yearDay as rest of current year
+  tm->year = year;
+  tm->yearDay = (uint16_t)days;
+  // Get month and day
+  for (uint8_t month = 0; month < TINY_MAX_MONTHS; month++) {
+    uint16_t daysInMonth = tiny_getMonthDays(year, month);
+    if (days < daysInMonth) {
+      tm->month = month;
+      tm->monthDay = days;
+      return;
+    }
+    days -= daysInMonth; // Decrement current month
+  }
+  // Error
+  return;
 }
 
 void tiny_getFormat(const tinyTimeType *tm, char *buf, uint32_t bufSize);
