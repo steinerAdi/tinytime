@@ -69,7 +69,7 @@ typedef struct {
   /* Date informations */
   uint8_t monthDay; ///< Day in the month range depending from 1 to the current month
   uint8_t month;    ///< Month of the current year, ranged from 0 - 11
-  uint16_t year;    ///< Current year since 1900.
+  uint16_t year;    ///< Current year since year 0
   /* Additional Date informations */
   uint8_t weakDay;  ///< Current weak day from sunday to saturday
   uint16_t yearDay; ///< Current year day
@@ -81,7 +81,6 @@ typedef struct {
  */
 typedef uint64_t tinyUnixType;
 
-#define TINY_YEAR_OFFSET (1900)     ///< Basic year offset of tiny time type
 #define TINY_UNIX_YEAR_BEGIN (1970) ///< Starting year of Unix time epoch
 #define TINY_ONE_MIN_IN_SEC (60)    ///< One minute in seconds
 #define TINY_ONE_HOUR_IN_SEC (3600) ///< One hour in seconds
