@@ -23,6 +23,7 @@
 
 #include "tinytime.h"
 #include <stddef.h>
+#include <stdio.h>
 
 #define LEAP_YEAR_FREQUENCY (4)
 #define LEAP_YEAR_REMOVED (100)
@@ -59,7 +60,7 @@ void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime) {
   tm->min = (uint8_t)((secInDay % TINY_ONE_DAY_IN_SEC) / TINY_ONE_MIN_IN_SEC);
   tm->sec = (uint8_t)(secInDay % TINY_ONE_MIN_IN_SEC);
   // Calculate Weekday, First day was a thursday (1.1.1970)
-  tm->weakDay = (days + TINY_THUR) % TINY_MAX_WEAKDAYS;
+  tm->weakDay = (days + TINY_THU) % TINY_MAX_WEAKDAYS;
   // Get current year, move throw all years
   uint16_t year = TINY_UNIX_YEAR_BEGIN;
   while (1) {
@@ -87,7 +88,37 @@ void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime) {
   return;
 }
 
-void tiny_getFormat(const tinyTimeType *tm, char *buf, uint32_t bufSize);
+void tiny_getFormat(const tinyTimeType *tm, char *buf, uint32_t bufSize) {
+  if (NULL == tm || NULL == buf || 0 == bufSize) {
+    return;
+  }
+#define BUFFER_SIZE (26)
+  static const char *weekDays[TINY_MAX_WEAKDAYS] = {
+      [TINY_SUN] = "Sun",
+      [TINY_MON] = "Mon",
+      [TINY_TUE] = "Tue",
+      [TINY_WED] = "Wed",
+      [TINY_THU] = "Thu",
+      [TINY_FRI] = "Fri",
+      [TINY_SAT] = "Sat"};
+
+  static const char *months[TINY_MAX_MONTHS] = {
+      [TINY_JAN] = "Jan",
+      [TINY_FEB] = "Feb",
+      [TINY_MAR] = "Mar",
+      [TINY_APR] = "Apr",
+      [TINY_MAY] = "May",
+      [TINY_JUN] = "Jun",
+      [TINY_JUL] = "Jul",
+      [TINY_AUG] = "Aug",
+      [TINY_SEP] = "Sep",
+      [TINY_OCT] = "Oct",
+      [TINY_NOV] = "Nov",
+      [TINY_DEC] = "Dec"};
+
+  snprintf(buf, bufSize, "%s %2d %s %4d %2d:%2d:%2d",
+      weekDays[tm->weakDay], tm->monthDay, months[tm->month], tm->year, tm->hour, tm->min, tm->sec);
+}
 
 uint8_t tiny_isLeapYear(const uint16_t year) {
   return (0 == (year % LEAP_YEAR_FREQUENCY) && (year % LEAP_YEAR_REMOVED != 0 || 0 == (year + TINY_YEAR_OFFSET) % LEAP_YEAR_CORRECTION));

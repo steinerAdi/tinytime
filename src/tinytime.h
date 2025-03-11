@@ -51,7 +51,7 @@ typedef enum {
   TINY_MON,
   TINY_TUE,
   TINY_WED,
-  TINY_THUR,
+  TINY_THU,
   TINY_FRI,
   TINY_SAT,
   TINY_MAX_WEAKDAYS
