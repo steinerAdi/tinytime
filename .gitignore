@@ -1,1 +1,8 @@
+# Output
 test_tinyTimeLib
+
+# Unity Tests
+coverage_report
+*.info
+*.gcda
+*.gcno

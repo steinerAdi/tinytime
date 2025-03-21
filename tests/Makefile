@@ -1,8 +1,8 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -Wpedantic
+CFLAGS=-Wall -Wextra -Wpedantic --coverage
 LDFLAGS= \
 -I../unity\
--I../lib
+-I../lib 
 
 SRC=../lib/tinytime.c ../unity/unity.c
 TEST=test_tinyTimeLib.c
@@ -16,5 +16,11 @@ build:
 test: build
 	./$(OUT)
 
+coverage: test
+	lcov --capture --directory . --output-file coverage.info
+	lcov  --ignore-errors unused --remove coverage.info '/usr/*' --output-file coverage_filtered.info
+	genhtml coverage_filtered.info --output-directory coverage_report
+
 clean:
-	rm -f $(OUT)
+	rm -f $(OUT) *.gcda *.gcno *.info
+	rm -rf coverage_report
