@@ -25,10 +25,10 @@
 #include <stddef.h>
 #include <stdio.h>
 
-#define LEAP_YEAR_FREQUENCY (4)
-#define LEAP_YEAR_REMOVED (100)
-#define LEAP_YEAR_CORRECTION (400)
-#define MONTH_DAY_OFFSET (1)
+#define LEAP_YEAR_FREQUENCY (4)    ///< Frequency of a leap year
+#define LEAP_YEAR_REMOVED (100)    ///< Removed leap year every century
+#define LEAP_YEAR_CORRECTION (400) ///< Not removed leap year every 4 centuries
+#define MONTH_DAY_OFFSET (1)       ///<
 
 tinyUnixType tiny_getUnixTime(const tinyTimeType *tm) {
   if (NULL == tm) {
@@ -44,7 +44,7 @@ tinyUnixType tiny_getUnixTime(const tinyTimeType *tm) {
 
   tinyUnixType days = (tinyUnixType)unixYearDiff * TINY_ONE_YEAR_IN_DAYS + numberOfLeapYears;
 
-  for (uint8_t i = 0; i < tm->month; i++) {
+  for (uint8_t i = TINY_JAN; i < tm->month; i++) {
     days += (tinyUnixType)tiny_getMonthDays(tm->year, i);
   }
 
@@ -69,7 +69,7 @@ void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime) {
   uint16_t year = TINY_UNIX_YEAR_BEGIN;
   while (1) {
     uint64_t daysInYear = TINY_ONE_YEAR_IN_DAYS + tiny_isLeapYear(year);
-    if (days < daysInYear) { //
+    if (days < daysInYear) {
       break;
     }
     days -= daysInYear; // Decrement the current year days
@@ -79,7 +79,7 @@ void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime) {
   tm->year = year;
   tm->yearDay = (uint16_t)days;
   // Get month and day
-  for (uint8_t month = 0; month < TINY_MAX_MONTHS; month++) {
+  for (uint8_t month = TINY_JAN; month < TINY_MAX_MONTHS; month++) {
     uint16_t daysInMonth = tiny_getMonthDays(year, month);
     if (days < daysInMonth) {
       tm->month = month;
@@ -92,12 +92,13 @@ void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime) {
   return;
 }
 
-void tiny_getFormat(const tinyTimeType *tm, char *buf, uint32_t bufSize) {
-  if (NULL == tm || NULL == buf || 0 == bufSize) {
-    return;
+const char *tiny_getFormat(const tinyTimeType *tm) {
+  if (NULL == tm) {
+    return NULL;
   }
 #define BUFFER_SIZE (26)
-  static const char *weekDays[TINY_MAX_WEAKDAYS] = {
+  static char formatBuffer[BUFFER_SIZE];
+  const char *weekDays[TINY_MAX_WEAKDAYS] = {
       [TINY_SUN] = "Sun",
       [TINY_MON] = "Mon",
       [TINY_TUE] = "Tue",
@@ -106,22 +107,35 @@ void tiny_getFormat(const tinyTimeType *tm, char *buf, uint32_t bufSize) {
       [TINY_FRI] = "Fri",
       [TINY_SAT] = "Sat"};
 
-  static const char *months[TINY_MAX_MONTHS] = {
-      [TINY_JAN] = "Jan",
-      [TINY_FEB] = "Feb",
-      [TINY_MAR] = "Mar",
-      [TINY_APR] = "Apr",
-      [TINY_MAY] = "May",
-      [TINY_JUN] = "Jun",
-      [TINY_JUL] = "Jul",
-      [TINY_AUG] = "Aug",
-      [TINY_SEP] = "Sep",
-      [TINY_OCT] = "Oct",
-      [TINY_NOV] = "Nov",
-      [TINY_DEC] = "Dec"};
+  const char *months[TINY_MAX_MONTHS - TINY_JAN] = {
+      [TINY_JAN -
+          TINY_JAN] = "Jan",
+      [TINY_FEB -
+          TINY_JAN] = "Feb",
+      [TINY_MAR -
+          TINY_JAN] = "Mar",
+      [TINY_APR -
+          TINY_JAN] = "Apr",
+      [TINY_MAY -
+          TINY_JAN] = "May",
+      [TINY_JUN -
+          TINY_JAN] = "Jun",
+      [TINY_JUL -
+          TINY_JAN] = "Jul",
+      [TINY_AUG -
+          TINY_JAN] = "Aug",
+      [TINY_SEP -
+          TINY_JAN] = "Sep",
+      [TINY_OCT -
+          TINY_JAN] = "Oct",
+      [TINY_NOV -
+          TINY_JAN] = "Nov",
+      [TINY_DEC -
+          TINY_JAN] = "Dec"};
 
-  snprintf(buf, bufSize, "%s %2d %s %4d %.2d:%.2d:%.2d",
-      weekDays[tm->weakDay], tm->monthDay, months[tm->month], tm->year, tm->hour, tm->min, tm->sec);
+  snprintf(formatBuffer, BUFFER_SIZE, "%s %2d %s %4d %.2d:%.2d:%.2d",
+      weekDays[tm->weakDay], tm->monthDay, months[tm->month - 1], tm->year, tm->hour, tm->min, tm->sec);
+  return formatBuffer;
 }
 
 uint8_t tiny_isLeapYear(const uint16_t year) {
@@ -129,22 +143,34 @@ uint8_t tiny_isLeapYear(const uint16_t year) {
 }
 
 uint8_t tiny_getMonthDays(const uint16_t year, const uint8_t month) {
-  static const uint8_t daysPerMonth[TINY_MAX_MONTHS] = {
-      [TINY_JAN] = 31,
-      [TINY_FEB] = 28,
-      [TINY_MAR] = 31,
-      [TINY_APR] = 30,
-      [TINY_MAY] = 31,
-      [TINY_JUN] = 30,
-      [TINY_JUL] = 31,
-      [TINY_AUG] = 31,
-      [TINY_SEP] = 30,
-      [TINY_OCT] = 31,
-      [TINY_NOV] = 30,
-      [TINY_DEC] = 31};
+  static const uint8_t daysPerMonth[TINY_MAX_MONTHS - TINY_JAN] = {
+      [TINY_JAN -
+          TINY_JAN] = 31,
+      [TINY_FEB -
+          TINY_JAN] = 28,
+      [TINY_MAR -
+          TINY_JAN] = 31,
+      [TINY_APR -
+          TINY_JAN] = 30,
+      [TINY_MAY -
+          TINY_JAN] = 31,
+      [TINY_JUN -
+          TINY_JAN] = 30,
+      [TINY_JUL -
+          TINY_JAN] = 31,
+      [TINY_AUG -
+          TINY_JAN] = 31,
+      [TINY_SEP -
+          TINY_JAN] = 30,
+      [TINY_OCT -
+          TINY_JAN] = 31,
+      [TINY_NOV -
+          TINY_JAN] = 30,
+      [TINY_DEC -
+          TINY_JAN] = 31};
   if (month == TINY_FEB) {
     // Check leap year and return
-    return daysPerMonth[month] + tiny_isLeapYear(year);
+    return daysPerMonth[month - TINY_JAN] + tiny_isLeapYear(year);
   }
-  return daysPerMonth[month];
+  return daysPerMonth[month - TINY_JAN];
 }

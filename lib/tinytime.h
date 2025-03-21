@@ -31,7 +31,7 @@ extern "C" {
 #include <stdint.h>
 
 typedef enum {
-  TINY_JAN = 0,
+  TINY_JAN = 1,
   TINY_FEB,
   TINY_MAR,
   TINY_APR,
@@ -68,7 +68,7 @@ typedef struct {
   uint8_t hour; ///< Hour since midnight ranged from 0 - 23
   /* Date informations */
   uint8_t monthDay; ///< Day in the month range depending from 1 to the current month
-  uint8_t month;    ///< Month of the current year, ranged from 0 - 11
+  uint8_t month;    ///< Month of the current year, ranged from 1 - 12
   uint16_t year;    ///< Current year since year 0
   /* Additional Date informations */
   uint8_t weakDay;  ///< Current weak day from sunday to saturday
@@ -91,7 +91,7 @@ tinyUnixType tiny_getUnixTime(const tinyTimeType *tm);
 
 void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime);
 
-void tiny_getFormat(const tinyTimeType *tm, char *buf, uint32_t bufSize);
+const char *tiny_getFormat(const tinyTimeType *tm);
 
 uint8_t tiny_isLeapYear(const uint16_t year);
 
