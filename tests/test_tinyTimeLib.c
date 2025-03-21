@@ -36,8 +36,35 @@ void test_isLeapYear(void) {
   }
 }
 
+void test_getMonthDays(void) {
+#define NUMBER_OF_TESTS (15)
+  uint8_t expectedValues[NUMBER_OF_TESTS][2] = {
+      {0, 0},
+      {31, TINY_JAN},
+      {28, TINY_FEB},
+      {31, TINY_MAR},
+      {30, TINY_APR},
+      {31, TINY_MAY},
+      {30, TINY_JUN},
+      {31, TINY_JUL},
+      {31, TINY_AUG},
+      {30, TINY_SEP},
+      {31, TINY_OCT},
+      {30, TINY_NOV},
+      {31, TINY_DEC},
+      {0, TINY_MAX_MONTHS},
+      {0, UINT8_MAX},
+  };
+  for (uint16_t i = 0; i < NUMBER_OF_TESTS; i++) {
+    TEST_ASSERT_EQUAL_UINT8(expectedValues[i][0], tiny_getMonthDays(2001, expectedValues[i][1])); // No leap year
+  }
+  // Test leap year with february
+  TEST_ASSERT_EQUAL_UINT8(29, tiny_getMonthDays(2000, TINY_FEB)); // No leap year
+}
+
 int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_isLeapYear);
+  RUN_TEST(test_getMonthDays);
   return UNITY_END();
 }

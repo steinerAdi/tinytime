@@ -143,6 +143,9 @@ uint8_t tiny_isLeapYear(const uint16_t year) {
 }
 
 uint8_t tiny_getMonthDays(const uint16_t year, const uint8_t month) {
+  if (month > TINY_DEC || month < TINY_JAN) {
+    return 0;
+  }
   static const uint8_t daysPerMonth[TINY_MAX_MONTHS - TINY_JAN] = {
       [TINY_JAN -
           TINY_JAN] = 31,
