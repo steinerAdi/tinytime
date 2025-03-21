@@ -1,0 +1,26 @@
+name: C Unit Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install -y gcc
+
+      - name: Compile Tests
+        run: gcc -o test_tiny_isLeapYear test_tiny_isLeapYear.c tiny_isLeapYear.c unity/unity.c -Wall -Wextra
+
+      - name: Run Unit Tests
+        run: ./test_tiny_isLeapYear

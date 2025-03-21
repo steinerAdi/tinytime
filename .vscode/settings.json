@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "tinytime.h": "c",
+        "unity.h": "c",
+        "unity_internals.h": "c"
+    }
+}
