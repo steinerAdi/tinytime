@@ -8,10 +8,12 @@ SRC=../lib/tinytime.c ../unity/unity.c
 TEST=test_tinyTimeLib.c
 OUT=test_tinyTimeLib
 
-all: test
+all: build
 
-test:
+build:
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(OUT) $(SRC) $(TEST)
+
+test: build
 	./$(OUT)
 
 clean:
