@@ -1,3 +1,7 @@
+[![Test Status](https://github.com/steinerAdi/tinytime/actions/workflows/ci.yml/badge.svg)](https://github.com/steinerAdi/tinytime/actions/workflows/ci.yml)
+
+[![codecov](https://codecov.io/gh/steinerAdi/tinytime/graph/badge.svg?token=YQAM1Q6SXE)](https://codecov.io/gh/steinerAdi/tinytime)
+
 # Tiny C Time Library
 
 Small lightweight library to handle unix and human readable time.
