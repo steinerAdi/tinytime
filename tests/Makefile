@@ -18,7 +18,7 @@ test: build
 
 coverage: test
 	lcov --capture --directory . --output-file coverage.info
-	lcov  --ignore-errors unused --remove coverage.info '/usr/*' --output-file coverage_filtered.info
+	lcov --ignore-errors unused --remove coverage.info '/tests/*' '/unity/*' --output-file coverage_filtered.info
 	genhtml coverage_filtered.info --output-directory coverage_report
 
 clean:
