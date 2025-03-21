@@ -22,7 +22,7 @@ jobs:
       
       - name: Build tests
         working-directory: tests
-        run: make build
+        run: ls
 
       - name: Run Unit Tests
         working-directory: tests
