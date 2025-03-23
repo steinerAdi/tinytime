@@ -40,7 +40,7 @@ tinyUnixType tiny_getUnixTime(const tinyTimeType *tm) {
 #define CENTURY_CORRECTION_OFFSET (1900)
 #define FOUR_CENTURY_CORRECTION_OFFSET (1600)
 #define FIRST_LEAP_YEAR_OFFSET (1)
-#define ERROR_VALUE (0)
+#define ERROR_VALUE (UINT64_MAX)
 
   if (NULL == tm) {
     return ERROR_VALUE;

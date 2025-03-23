@@ -91,8 +91,20 @@ typedef uint64_t tinyUnixType;
 #define TINY_ONE_DAY_IN_SEC (86400) ///< One day in seconds
 #define TINY_ONE_YEAR_IN_DAYS (365) ///< One basic year in days
 
+/**
+ * @brief Get the current unix time from a time
+ *
+ * @param tm Base time type to convert to unix time
+ * @return tinyUnixType Unix time of the tm time and date or UINT64_MAX in case of an error
+ */
 tinyUnixType tiny_getUnixTime(const tinyTimeType *tm);
 
+/**
+ * @brief
+ *
+ * @param tm
+ * @param unixTime
+ */
 void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime);
 
 const char *tiny_getFormat(const tinyTimeType *tm);

@@ -33,7 +33,7 @@ struct
   char formatString[26];
 } testTimes[] = {
     {.timeType = {0},
-        .unixTime = 0,
+        .unixTime = UINT64_MAX,
         .formatString = ""},
     {.timeType = {
          .sec = 1,
@@ -177,16 +177,16 @@ void test_getUnixTime(void) {
     TEST_ASSERT_EQUAL_UINT64(testTimes[i].unixTime, tiny_getUnixTime(&testTimes[i].timeType));
   }
   // Check invalid dates and times
-  TEST_ASSERT_EQUAL_UINT64(0, tiny_getUnixTime(NULL));
+  TEST_ASSERT_EQUAL_UINT64(UINT64_MAX, tiny_getUnixTime(NULL));
   tinyTimeType invalidTimeType = {0};
   invalidTimeType.sec = TINY_SEC_MAX + 1;
-  TEST_ASSERT_EQUAL_UINT64(0, tiny_getUnixTime(&invalidTimeType));
+  TEST_ASSERT_EQUAL_UINT64(UINT64_MAX, tiny_getUnixTime(&invalidTimeType));
   invalidTimeType.sec = TINY_SEC_MAX;
   invalidTimeType.year = TINY_UNIX_YEAR_BEGIN - 1;
-  TEST_ASSERT_EQUAL_UINT64(0, tiny_getUnixTime(&invalidTimeType));
+  TEST_ASSERT_EQUAL_UINT64(UINT64_MAX, tiny_getUnixTime(&invalidTimeType));
   invalidTimeType.year = TINY_UNIX_YEAR_BEGIN;
   invalidTimeType.month = TINY_MAX_MONTHS;
-  TEST_ASSERT_EQUAL_UINT64(0, tiny_getUnixTime(&invalidTimeType));
+  TEST_ASSERT_EQUAL_UINT64(UINT64_MAX, tiny_getUnixTime(&invalidTimeType));
 }
 
 void test_getTimeType(void) {
