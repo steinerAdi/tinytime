@@ -30,9 +30,11 @@ struct
 {
   tinyTimeType timeType;
   tinyUnixType unixTime;
+  char formatString[26];
 } testTimes[] = {
     {.timeType = {0},
-        .unixTime = 0},
+        .unixTime = 0,
+        .formatString = ""},
     {.timeType = {
          .sec = 1,
          .min = 0,
@@ -43,7 +45,8 @@ struct
          .weakDay = TINY_THU,
          .yearDay = 1,
      },
-        .unixTime = 1},
+        .unixTime = 1,
+        .formatString = "Thu  1 Jan 1970 00:00:01"},
     {.timeType = {
          .sec = 56,
          .min = 34,
@@ -54,7 +57,8 @@ struct
          .weakDay = TINY_FRI,
          .yearDay = 80,
      },
-        .unixTime = 1742560496},
+        .unixTime = 1742560496,
+        .formatString = "Fri 21 Mar 2025 12:34:56"},
     {.timeType = {
          .sec = 59,
          .min = 0,
@@ -65,7 +69,8 @@ struct
          .weakDay = TINY_SAT,
          .yearDay = 1,
      },
-        .unixTime = 946684859},
+        .unixTime = 946684859,
+        .formatString = "Sat  1 Jan 2000 00:00:59"},
     {.timeType = {
          .sec = 30,
          .min = 45,
@@ -76,7 +81,8 @@ struct
          .weakDay = TINY_THU,
          .yearDay = 60,
      },
-        .unixTime = 1709250330},
+        .unixTime = 1709250330,
+        .formatString = "Thu 29 Feb 2024 23:45:30"},
     {.timeType = {
          .sec = 15,
          .min = 30,
@@ -87,7 +93,8 @@ struct
          .weakDay = TINY_THU,
          .yearDay = 196,
      },
-        .unixTime = 1279218615},
+        .unixTime = 1279218615,
+        .formatString = "Thu 15 Jul 2010 18:30:15"},
     {.timeType = {
          .sec = 17,
          .min = 16,
@@ -98,7 +105,8 @@ struct
          .weakDay = TINY_FRI,
          .yearDay = 307,
      },
-        .unixTime = 815386577},
+        .unixTime = 815386577,
+        .formatString = "Fri  3 Nov 1995 08:16:17"},
     {.timeType = {
          .sec = 17,
          .min = 16,
@@ -109,7 +117,8 @@ struct
          .weakDay = TINY_SUN,
          .yearDay = 346,
      },
-        .unixTime = 4858067777}};
+        .unixTime = 4858067777,
+        .formatString = "Sun 12 Dec 2123 15:16:17"}};
 
 void setUp(void) {
 } // Empty needed definition
@@ -176,7 +185,11 @@ void test_getTimeType(void) {
   }
 }
 
-void test_getFormat(void);
+void test_getFormat(void) {
+  for (size_t i = 1; i < sizeof(testTimes) / sizeof(testTimes[0]); i++) {
+    TEST_ASSERT_EQUAL_STRING(testTimes[i].formatString, tiny_getFormat(&testTimes[i].timeType));
+  }
+}
 
 int main(void) {
   UNITY_BEGIN();
@@ -184,5 +197,6 @@ int main(void) {
   RUN_TEST(test_getMonthDays);
   RUN_TEST(test_getUnixTime);
   RUN_TEST(test_getTimeType);
+  RUN_TEST(test_getFormat);
   return UNITY_END();
 }
