@@ -23,6 +23,7 @@
 
 #include "tinytime.h"
 #include "unity.h"
+#include <string.h>
 
 /* timeType and Unix time base */
 struct
@@ -39,6 +40,8 @@ struct
          .monthDay = 1,
          .month = TINY_JAN,
          .year = 1970,
+         .weakDay = TINY_THU,
+         .yearDay = 1,
      },
         .unixTime = 1},
     {.timeType = {
@@ -48,6 +51,8 @@ struct
          .monthDay = 21,
          .month = TINY_MAR,
          .year = 2025,
+         .weakDay = TINY_FRI,
+         .yearDay = 80,
      },
         .unixTime = 1742560496},
     {.timeType = {
@@ -57,6 +62,8 @@ struct
          .monthDay = 1,
          .month = TINY_JAN,
          .year = 2000,
+         .weakDay = TINY_SAT,
+         .yearDay = 1,
      },
         .unixTime = 946684859},
     {.timeType = {
@@ -66,6 +73,8 @@ struct
          .monthDay = 29,
          .month = TINY_FEB,
          .year = 2024,
+         .weakDay = TINY_THU,
+         .yearDay = 60,
      },
         .unixTime = 1709250330},
     {.timeType = {
@@ -75,6 +84,8 @@ struct
          .monthDay = 15,
          .month = TINY_JUL,
          .year = 2010,
+         .weakDay = TINY_THU,
+         .yearDay = 196,
      },
         .unixTime = 1279218615},
     {.timeType = {
@@ -84,6 +95,8 @@ struct
          .monthDay = 3,
          .month = TINY_NOV,
          .year = 1995,
+         .weakDay = TINY_FRI,
+         .yearDay = 307,
      },
         .unixTime = 815386577},
     {.timeType = {
@@ -93,6 +106,8 @@ struct
          .monthDay = 12,
          .month = TINY_DEC,
          .year = 2123,
+         .weakDay = TINY_MON,
+         .yearDay = 346,
      },
         .unixTime = 4858067777}};
 
@@ -100,6 +115,19 @@ void setUp(void) {
 } // Empty needed definition
 void tearDown(void) {
 } // Empty needed definition
+
+void compareTimeTypes(const tinyTimeType *a, const tinyTimeType *b) {
+  TEST_ASSERT_EQUAL_UINT8(a->sec, b->sec);
+  TEST_ASSERT_EQUAL_UINT8(a->min, b->min);
+  TEST_ASSERT_EQUAL_UINT8(a->hour, b->hour);
+
+  TEST_ASSERT_EQUAL_UINT8(a->monthDay, b->monthDay);
+  TEST_ASSERT_EQUAL_UINT8(a->month, b->month);
+  TEST_ASSERT_EQUAL_UINT8(a->year, b->year);
+
+  TEST_ASSERT_EQUAL_UINT8(a->weakDay, b->weakDay);
+  TEST_ASSERT_EQUAL_UINT8(a->yearDay, b->yearDay);
+}
 
 void test_isLeapYear(void) {
   uint16_t leapYears[] = {1904, 1908, 1912, 1916, 1920, 1924, 1928, 1932, 1936, 1940, 1944, 1948, 1952, 1956, 1960, 1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016, 2020, 2024, 2028, 2032, 2036, 2040, 2044, 2048, 2052, 2056, 2060, 2064, 2068, 2072, 2076, 2080, 2084, 2088, 2092, 2096, 2104, 2108, 2112, 2116, 2120, 2124, 2128, 2132, 2136, 2140, 2144, 2148, 2152, 2156, 2160, 2164, 2168, 2172, 2176, 2180, 2184, 2188, 2192, 2196, 2400, 2800};
@@ -142,7 +170,12 @@ void test_getUnixTime(void) {
 
 void test_getTimeType(void) {
   tinyTimeType testDate = {0};
-  tiny_getTimeType(&testDate, 0);
+  for (size_t i = 1; i < sizeof(testTimes) / sizeof(testTimes[0]); i++) {
+    tiny_getTimeType(&testDate, testTimes[i].unixTime);
+    compareTimeTypes(&testDate, &testTimes[i].timeType);
+    puts(tiny_getFormat(&testDate));
+    puts(tiny_getFormat(&testTimes[i].timeType));
+  }
 }
 
 void test_getFormat(void);
@@ -152,5 +185,6 @@ int main(void) {
   RUN_TEST(test_isLeapYear);
   RUN_TEST(test_getMonthDays);
   RUN_TEST(test_getUnixTime);
+  RUN_TEST(test_getTimeType);
   return UNITY_END();
 }
