@@ -79,14 +79,14 @@ void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime) {
     return;
   }
   // Get base values
-  uint64_t days = unixTime / TINY_ONE_DAY_IN_SEC;
+  uint64_t days = unixTime / TINY_ONE_DAY_IN_SEC + 1;
   uint64_t secInDay = unixTime % TINY_ONE_DAY_IN_SEC;
   // Set current daytime
   tm->hour = (uint8_t)(secInDay / TINY_ONE_HOUR_IN_SEC);
   tm->min = (uint8_t)((secInDay % TINY_ONE_HOUR_IN_SEC) / TINY_ONE_MIN_IN_SEC);
   tm->sec = (uint8_t)(secInDay % TINY_ONE_MIN_IN_SEC);
   // Calculate Weekday, First day was a thursday (1.1.1970)
-  tm->weakDay = (days + TINY_THU) % TINY_MAX_WEAKDAYS;
+  tm->weakDay = (days + TINY_WED) % TINY_MAX_WEAKDAYS;
   // Get current year, move throw all years
   uint16_t year = TINY_UNIX_YEAR_BEGIN;
   while (1) {
@@ -103,9 +103,9 @@ void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime) {
   // Get month and day
   for (uint8_t month = TINY_JAN; month < TINY_MAX_MONTHS; month++) {
     uint16_t daysInMonth = tiny_getMonthDays(year, month);
-    if (days < daysInMonth) {
+    if (days <= daysInMonth) {
       tm->month = month;
-      tm->monthDay = days + MONTH_DAY_OFFSET; // Starting at 1
+      tm->monthDay = days; // Starting at 1
       return;
     }
     days -= daysInMonth; // Decrement current month

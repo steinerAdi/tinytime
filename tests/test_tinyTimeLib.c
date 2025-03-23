@@ -106,7 +106,7 @@ struct
          .monthDay = 12,
          .month = TINY_DEC,
          .year = 2123,
-         .weakDay = TINY_MON,
+         .weakDay = TINY_SUN,
          .yearDay = 346,
      },
         .unixTime = 4858067777}};
@@ -116,17 +116,17 @@ void setUp(void) {
 void tearDown(void) {
 } // Empty needed definition
 
-void compareTimeTypes(const tinyTimeType *a, const tinyTimeType *b) {
-  TEST_ASSERT_EQUAL_UINT8(a->sec, b->sec);
-  TEST_ASSERT_EQUAL_UINT8(a->min, b->min);
-  TEST_ASSERT_EQUAL_UINT8(a->hour, b->hour);
+void compareTimeTypes(const tinyTimeType *expected, const tinyTimeType *actual) {
+  TEST_ASSERT_EQUAL_UINT8(expected->sec, actual->sec);
+  TEST_ASSERT_EQUAL_UINT8(expected->min, actual->min);
+  TEST_ASSERT_EQUAL_UINT8(expected->hour, actual->hour);
 
-  TEST_ASSERT_EQUAL_UINT8(a->monthDay, b->monthDay);
-  TEST_ASSERT_EQUAL_UINT8(a->month, b->month);
-  TEST_ASSERT_EQUAL_UINT8(a->year, b->year);
+  TEST_ASSERT_EQUAL_UINT8(expected->monthDay, actual->monthDay);
+  TEST_ASSERT_EQUAL_UINT8(expected->month, actual->month);
+  TEST_ASSERT_EQUAL_UINT8(expected->year, actual->year);
 
-  TEST_ASSERT_EQUAL_UINT8(a->weakDay, b->weakDay);
-  TEST_ASSERT_EQUAL_UINT8(a->yearDay, b->yearDay);
+  TEST_ASSERT_EQUAL_UINT8(expected->weakDay, actual->weakDay);
+  TEST_ASSERT_EQUAL_UINT8(expected->yearDay, actual->yearDay);
 }
 
 void test_isLeapYear(void) {
@@ -172,9 +172,7 @@ void test_getTimeType(void) {
   tinyTimeType testDate = {0};
   for (size_t i = 1; i < sizeof(testTimes) / sizeof(testTimes[0]); i++) {
     tiny_getTimeType(&testDate, testTimes[i].unixTime);
-    compareTimeTypes(&testDate, &testTimes[i].timeType);
-    puts(tiny_getFormat(&testDate));
-    puts(tiny_getFormat(&testTimes[i].timeType));
+    compareTimeTypes(&testTimes[i].timeType, &testDate);
   }
 }
 
