@@ -172,13 +172,28 @@ void test_getMonthDays(void) {
 }
 
 void test_getUnixTime(void) {
+  // Check valid dates
   for (size_t i = 0; i < sizeof(testTimes) / sizeof(testTimes[0]); i++) {
     TEST_ASSERT_EQUAL_UINT64(testTimes[i].unixTime, tiny_getUnixTime(&testTimes[i].timeType));
   }
+  // Check invalid dates and times
+  TEST_ASSERT_EQUAL_UINT64(0, tiny_getUnixTime(NULL));
+  tinyTimeType invalidTimeType = {0};
+  invalidTimeType.sec = TINY_SEC_MAX + 1;
+  TEST_ASSERT_EQUAL_UINT64(0, tiny_getUnixTime(&invalidTimeType));
+  invalidTimeType.sec = TINY_SEC_MAX;
+  invalidTimeType.year = TINY_UNIX_YEAR_BEGIN - 1;
+  TEST_ASSERT_EQUAL_UINT64(0, tiny_getUnixTime(&invalidTimeType));
+  invalidTimeType.year = TINY_UNIX_YEAR_BEGIN;
+  invalidTimeType.month = TINY_MAX_MONTHS;
+  TEST_ASSERT_EQUAL_UINT64(0, tiny_getUnixTime(&invalidTimeType));
 }
 
 void test_getTimeType(void) {
   tinyTimeType testDate = {0};
+  // Add NULL test
+  tiny_getTimeType(NULL, 0);
+  // Check valid dates
   for (size_t i = 1; i < sizeof(testTimes) / sizeof(testTimes[0]); i++) {
     tiny_getTimeType(&testDate, testTimes[i].unixTime);
     compareTimeTypes(&testTimes[i].timeType, &testDate);

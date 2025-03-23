@@ -110,8 +110,6 @@ void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime) {
     }
     days -= daysInMonth; // Decrement current month
   }
-  // Error
-  return;
 }
 
 const char *tiny_getFormat(const tinyTimeType *tm) {
