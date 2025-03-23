@@ -69,6 +69,60 @@ void test__getUnixTime(void) {
   testDate.year = 1970;
   testDate.monthDay = 1;
   TEST_ASSERT_EQUAL_UINT64(0, tiny_getUnixTime(&testDate));
+
+  testDate.sec = 1;
+  testDate.month = TINY_JAN;
+  testDate.year = 1970;
+  testDate.monthDay = 1;
+  TEST_ASSERT_EQUAL_UINT64(1, tiny_getUnixTime(&testDate));
+
+  testDate.sec = 56;
+  testDate.min = 34;
+  testDate.hour = 12;
+  testDate.monthDay = 21;
+  testDate.month = TINY_MAR;
+  testDate.year = 2025;
+  TEST_ASSERT_EQUAL_UINT64(1742560496, tiny_getUnixTime(&testDate));
+
+  testDate.sec = 59;
+  testDate.min = 0;
+  testDate.hour = 0;
+  testDate.monthDay = 1;
+  testDate.month = TINY_JAN;
+  testDate.year = 2000;
+  TEST_ASSERT_EQUAL_UINT64(946684859, tiny_getUnixTime(&testDate));
+
+  testDate.sec = 30;
+  testDate.min = 45;
+  testDate.hour = 23;
+  testDate.monthDay = 29;
+  testDate.month = TINY_FEB;
+  testDate.year = 2024;
+  TEST_ASSERT_EQUAL_UINT64(1709250330, tiny_getUnixTime(&testDate));
+
+  testDate.sec = 15;
+  testDate.min = 30;
+  testDate.hour = 18;
+  testDate.monthDay = 15;
+  testDate.month = TINY_JUL;
+  testDate.year = 2010;
+  TEST_ASSERT_EQUAL_UINT64(1279218615, tiny_getUnixTime(&testDate));
+
+  testDate.sec = 17;
+  testDate.min = 16;
+  testDate.hour = 8;
+  testDate.monthDay = 3;
+  testDate.month = TINY_NOV;
+  testDate.year = 1995;
+  TEST_ASSERT_EQUAL_UINT64(815386577, tiny_getUnixTime(&testDate));
+
+  testDate.sec = 17;
+  testDate.min = 16;
+  testDate.hour = 15;
+  testDate.monthDay = 12;
+  testDate.month = TINY_DEC;
+  testDate.year = 2123;
+  TEST_ASSERT_EQUAL_UINT64(4858067777, tiny_getUnixTime(&testDate));
 }
 
 void test_getTimeType(void) {
