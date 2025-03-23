@@ -24,6 +24,78 @@
 #include "tinytime.h"
 #include "unity.h"
 
+/* timeType and Unix time base */
+struct
+{
+  tinyTimeType timeType;
+  tinyUnixType unixTime;
+} testTimes[] = {
+    {.timeType = {0},
+        .unixTime = 0},
+    {.timeType = {
+         .sec = 1,
+         .min = 0,
+         .hour = 0,
+         .monthDay = 1,
+         .month = TINY_JAN,
+         .year = 1970,
+     },
+        .unixTime = 1},
+    {.timeType = {
+         .sec = 56,
+         .min = 34,
+         .hour = 12,
+         .monthDay = 21,
+         .month = TINY_MAR,
+         .year = 2025,
+     },
+        .unixTime = 1742560496},
+    {.timeType = {
+         .sec = 59,
+         .min = 0,
+         .hour = 0,
+         .monthDay = 1,
+         .month = TINY_JAN,
+         .year = 2000,
+     },
+        .unixTime = 946684859},
+    {.timeType = {
+         .sec = 30,
+         .min = 45,
+         .hour = 23,
+         .monthDay = 29,
+         .month = TINY_FEB,
+         .year = 2024,
+     },
+        .unixTime = 1709250330},
+    {.timeType = {
+         .sec = 15,
+         .min = 30,
+         .hour = 18,
+         .monthDay = 15,
+         .month = TINY_JUL,
+         .year = 2010,
+     },
+        .unixTime = 1279218615},
+    {.timeType = {
+         .sec = 17,
+         .min = 16,
+         .hour = 8,
+         .monthDay = 3,
+         .month = TINY_NOV,
+         .year = 1995,
+     },
+        .unixTime = 815386577},
+    {.timeType = {
+         .sec = 17,
+         .min = 16,
+         .hour = 15,
+         .monthDay = 12,
+         .month = TINY_DEC,
+         .year = 2123,
+     },
+        .unixTime = 4858067777}};
+
 void setUp(void) {
 } // Empty needed definition
 void tearDown(void) {
@@ -62,70 +134,15 @@ void test_getMonthDays(void) {
   TEST_ASSERT_EQUAL_UINT8(29, tiny_getMonthDays(2000, TINY_FEB)); // Leap year
 }
 
-void test__getUnixTime(void) {
-  tinyTimeType testDate = {0};
-  TEST_ASSERT_EQUAL_UINT64(0, tiny_getUnixTime(&testDate));
-  testDate.month = TINY_JAN;
-  testDate.year = 1970;
-  testDate.monthDay = 1;
-  TEST_ASSERT_EQUAL_UINT64(0, tiny_getUnixTime(&testDate));
-
-  testDate.sec = 1;
-  testDate.month = TINY_JAN;
-  testDate.year = 1970;
-  testDate.monthDay = 1;
-  TEST_ASSERT_EQUAL_UINT64(1, tiny_getUnixTime(&testDate));
-
-  testDate.sec = 56;
-  testDate.min = 34;
-  testDate.hour = 12;
-  testDate.monthDay = 21;
-  testDate.month = TINY_MAR;
-  testDate.year = 2025;
-  TEST_ASSERT_EQUAL_UINT64(1742560496, tiny_getUnixTime(&testDate));
-
-  testDate.sec = 59;
-  testDate.min = 0;
-  testDate.hour = 0;
-  testDate.monthDay = 1;
-  testDate.month = TINY_JAN;
-  testDate.year = 2000;
-  TEST_ASSERT_EQUAL_UINT64(946684859, tiny_getUnixTime(&testDate));
-
-  testDate.sec = 30;
-  testDate.min = 45;
-  testDate.hour = 23;
-  testDate.monthDay = 29;
-  testDate.month = TINY_FEB;
-  testDate.year = 2024;
-  TEST_ASSERT_EQUAL_UINT64(1709250330, tiny_getUnixTime(&testDate));
-
-  testDate.sec = 15;
-  testDate.min = 30;
-  testDate.hour = 18;
-  testDate.monthDay = 15;
-  testDate.month = TINY_JUL;
-  testDate.year = 2010;
-  TEST_ASSERT_EQUAL_UINT64(1279218615, tiny_getUnixTime(&testDate));
-
-  testDate.sec = 17;
-  testDate.min = 16;
-  testDate.hour = 8;
-  testDate.monthDay = 3;
-  testDate.month = TINY_NOV;
-  testDate.year = 1995;
-  TEST_ASSERT_EQUAL_UINT64(815386577, tiny_getUnixTime(&testDate));
-
-  testDate.sec = 17;
-  testDate.min = 16;
-  testDate.hour = 15;
-  testDate.monthDay = 12;
-  testDate.month = TINY_DEC;
-  testDate.year = 2123;
-  TEST_ASSERT_EQUAL_UINT64(4858067777, tiny_getUnixTime(&testDate));
+void test_getUnixTime(void) {
+  for (size_t i = 0; i < sizeof(testTimes) / sizeof(testTimes[0]); i++) {
+    TEST_ASSERT_EQUAL_UINT64(testTimes[i].unixTime, tiny_getUnixTime(&testTimes[i].timeType));
+  }
 }
 
 void test_getTimeType(void) {
+  tinyTimeType testDate = {0};
+  tiny_getTimeType(&testDate, 0);
 }
 
 void test_getFormat(void);
@@ -134,6 +151,6 @@ int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_isLeapYear);
   RUN_TEST(test_getMonthDays);
-  RUN_TEST(test__getUnixTime);
+  RUN_TEST(test_getUnixTime);
   return UNITY_END();
 }
