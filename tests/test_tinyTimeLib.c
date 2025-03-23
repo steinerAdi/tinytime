@@ -59,12 +59,27 @@ void test_getMonthDays(void) {
     TEST_ASSERT_EQUAL_UINT8(expectedValues[i][0], tiny_getMonthDays(2001, expectedValues[i][1])); // No leap year
   }
   // Test leap year with february
-  TEST_ASSERT_EQUAL_UINT8(29, tiny_getMonthDays(2000, TINY_FEB)); // No leap year
+  TEST_ASSERT_EQUAL_UINT8(29, tiny_getMonthDays(2000, TINY_FEB)); // Leap year
 }
+
+void test__getUnixTime(void) {
+  tinyTimeType testDate = {0};
+  TEST_ASSERT_EQUAL_UINT64(0, tiny_getUnixTime(&testDate));
+  testDate.month = TINY_JAN;
+  testDate.year = 1970;
+  testDate.monthDay = 1;
+  TEST_ASSERT_EQUAL_UINT64(0, tiny_getUnixTime(&testDate));
+}
+
+void test_getTimeType(void) {
+}
+
+void test_getFormat(void);
 
 int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_isLeapYear);
   RUN_TEST(test_getMonthDays);
+  RUN_TEST(test__getUnixTime);
   return UNITY_END();
 }
