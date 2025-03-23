@@ -100,17 +100,48 @@ typedef uint64_t tinyUnixType;
 tinyUnixType tiny_getUnixTime(const tinyTimeType *tm);
 
 /**
- * @brief
+ * @brief Convert the unix time to the human readable format tinyTimeType
  *
- * @param tm
- * @param unixTime
+ * @param tm The reference to a tinyTimeType structure instance
+ * @param unixTime The unix time to convert
  */
 void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime);
 
+/**
+ * @brief Returns a string converted human readable date format.
+ *
+ * The returned string has the following format:
+ *
+ * ``Www dd Mmm yyyy hh:mm:ss\0``
+ *
+ * Where Www is the weekday,
+ * dd the day of the month, Mmm the month (in letters), yyyy the year
+ * and hh:mm:ss the time.
+ *
+ * The static c-array buffer has a size of 25.
+ *
+ * @param tm Pointer to an object of type tinyTimeType that contains a time value
+ * @return A 25 byte sized C-string containing the date and time information in a human-readable format.
+ */
 const char *tiny_getFormat(const tinyTimeType *tm);
 
+/**
+ * @brief Checks if the given year is a leap year.
+ *
+ * @param year the year to check if it is a leap year
+ * @return uint8_t 1 if it is a leap year, 0 otherwise
+ */
 uint8_t tiny_isLeapYear(const uint16_t year);
 
+/**
+ * @brief Get the current month days of the year and month.
+ *
+ * The year is needed in case of a leap year for february
+ *
+ * @param year The current year
+ * @param month The desired month
+ * @return uint8_t The number of days in the month of the year
+ */
 uint8_t tiny_getMonthDays(const uint16_t year, const uint8_t month);
 
 #ifdef __cplusplus

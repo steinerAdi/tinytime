@@ -117,7 +117,7 @@ const char *tiny_getFormat(const tinyTimeType *tm) {
     return NULL;
   }
 
-#define BUFFER_SIZE (26)
+#define BUFFER_SIZE (25)
   static char formatBuffer[BUFFER_SIZE];
   const char *weekDays[TINY_MAX_WEAKDAYS] = {
       [TINY_SUN] = "Sun",
