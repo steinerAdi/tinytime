@@ -118,6 +118,7 @@ const char *tiny_getFormat(const tinyTimeType *tm) {
   if (NULL == tm) {
     return NULL;
   }
+
 #define BUFFER_SIZE (26)
   static char formatBuffer[BUFFER_SIZE];
   const char *weekDays[TINY_MAX_WEAKDAYS] = {
@@ -154,9 +155,14 @@ const char *tiny_getFormat(const tinyTimeType *tm) {
           TINY_JAN] = "Nov",
       [TINY_DEC -
           TINY_JAN] = "Dec"};
-
-  snprintf(formatBuffer, BUFFER_SIZE, "%s %2d %s %4d %.2d:%.2d:%.2d",
-      weekDays[tm->weakDay], tm->monthDay, months[tm->month - 1], tm->year, tm->hour, tm->min, tm->sec);
+  if (IS_NOT_IN_RANGE(tm->weakDay, 0, TINY_SAT)) {
+    snprintf(formatBuffer, BUFFER_SIZE, "Day %3d not in range", tm->weakDay);
+  } else if (IS_NOT_IN_RANGE(tm->month), TINY_JAN, TINY_DEC) {
+    snprintf(formatBuffer, BUFFER_SIZE, "Month %3d not in range", tm->month);
+  } else {
+    snprintf(formatBuffer, BUFFER_SIZE, "%s %2d %s %4d %.2d:%.2d:%.2d",
+        weekDays[tm->weakDay], tm->monthDay, months[tm->month - 1], tm->year, tm->hour, tm->min, tm->sec);
+  }
   return formatBuffer;
 }
 
