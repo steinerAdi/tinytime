@@ -28,15 +28,37 @@
 #define LEAP_YEAR_FREQUENCY (4)    ///< Frequency of a leap year
 #define LEAP_YEAR_REMOVED (100)    ///< Removed leap year every century
 #define LEAP_YEAR_CORRECTION (400) ///< Not removed leap year every 4 centuries
-#define MONTH_DAY_OFFSET (1)       ///<
+#define MONTH_DAY_OFFSET (1)       ///< Month day starts at 1
+
+/**
+ * @brief Checks if the check value is in range from min and max
+ *
+ */
+#define IS_NOT_IN_RANGE(CHECK, MIN, MAX) ((CHECK) < (MIN) || (CHECK) > (MAX))
 
 tinyUnixType tiny_getUnixTime(const tinyTimeType *tm) {
-  if (NULL == tm) {
-    return 0;
-  }
 #define CENTURY_CORRECTION_OFFSET (1900)
 #define FOUR_CENTURY_CORRECTION_OFFSET (1600)
 #define FIRST_LEAP_YEAR_OFFSET (1)
+#define ERROR_VALUE (0)
+
+  if (NULL == tm) {
+    return ERROR_VALUE;
+  }
+  // Check valid time
+  if (IS_NOT_IN_RANGE(tm->sec, 0, TINY_SEC_MAX) ||
+      IS_NOT_IN_RANGE(tm->min, 0, TINY_MINUTE_MAX) ||
+      IS_NOT_IN_RANGE(tm->hour, 0, TINY_HOUR_MAX)) {
+    return ERROR_VALUE;
+  }
+  // Check valid year
+  if (IS_NOT_IN_RANGE(tm->year, TINY_UNIX_YEAR_BEGIN, UINT16_MAX)) {
+    return ERROR_VALUE;
+  }
+  // Checks a valid day and month
+  if (IS_NOT_IN_RANGE(tm->monthDay, MONTH_DAY_OFFSET, tiny_getMonthDays(tm->year, tm->month))) {
+    return ERROR_VALUE;
+  }
 
   const uint16_t unixYearDiff = tm->year - TINY_UNIX_YEAR_BEGIN;
   const uint16_t leapYearCheck = tm->year - FIRST_LEAP_YEAR_OFFSET; // Used to include last year, this year will be included in
@@ -143,7 +165,7 @@ uint8_t tiny_isLeapYear(const uint16_t year) {
 }
 
 uint8_t tiny_getMonthDays(const uint16_t year, const uint8_t month) {
-  if (month > TINY_DEC || month < TINY_JAN) {
+  if (IS_NOT_IN_RANGE(month, TINY_JAN, TINY_DEC)) {
     return 0;
   }
   static const uint8_t daysPerMonth[TINY_MAX_MONTHS - TINY_JAN] = {

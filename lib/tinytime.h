@@ -81,6 +81,10 @@ typedef struct {
  */
 typedef uint64_t tinyUnixType;
 
+#define TINY_SEC_MAX (59)    ///< Max second value
+#define TINY_MINUTE_MAX (59) ///< Max minute value
+#define TINY_HOUR_MAX (23)   ///< Max hour value
+
 #define TINY_UNIX_YEAR_BEGIN (1970) ///< Starting year of Unix time epoch
 #define TINY_ONE_MIN_IN_SEC (60)    ///< One minute in seconds
 #define TINY_ONE_HOUR_IN_SEC (3600) ///< One hour in seconds
