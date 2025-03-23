@@ -186,9 +186,19 @@ void test_getTimeType(void) {
 }
 
 void test_getFormat(void) {
+  // Check NULL argument
+  TEST_ASSERT_EQUAL_PTR(NULL, tiny_getFormat(NULL));
+  // Check valid days
   for (size_t i = 1; i < sizeof(testTimes) / sizeof(testTimes[0]); i++) {
     TEST_ASSERT_EQUAL_STRING(testTimes[i].formatString, tiny_getFormat(&testTimes[i].timeType));
   }
+  tinyTimeType wrongValues = {
+      .weakDay = TINY_MAX_WEAKDAYS,
+      .month = TINY_JAN};
+  TEST_ASSERT_EQUAL_STRING("Day   7 not in range", tiny_getFormat(&wrongValues));
+  wrongValues.weakDay = TINY_SUN,
+  wrongValues.month = TINY_MAX_MONTHS;
+  TEST_ASSERT_EQUAL_STRING("Month  13 not in range", tiny_getFormat(&wrongValues));
 }
 
 int main(void) {

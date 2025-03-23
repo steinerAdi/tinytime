@@ -157,7 +157,7 @@ const char *tiny_getFormat(const tinyTimeType *tm) {
           TINY_JAN] = "Dec"};
   if (IS_NOT_IN_RANGE(tm->weakDay, 0, TINY_SAT)) {
     snprintf(formatBuffer, BUFFER_SIZE, "Day %3d not in range", tm->weakDay);
-  } else if (IS_NOT_IN_RANGE(tm->month), TINY_JAN, TINY_DEC) {
+  } else if (IS_NOT_IN_RANGE(tm->month, TINY_JAN, TINY_DEC)) {
     snprintf(formatBuffer, BUFFER_SIZE, "Month %3d not in range", tm->month);
   } else {
     snprintf(formatBuffer, BUFFER_SIZE, "%s %2d %s %4d %.2d:%.2d:%.2d",
