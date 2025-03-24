@@ -6,3 +6,6 @@ coverage_report
 *.info
 *.gcda
 *.gcno
+
+# VS-Code
+.vscode
