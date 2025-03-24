@@ -5,22 +5,23 @@
 Small lightweight library to handle unix and human readable time.
 
 ## About The Project
-
+This library is a lightweight time.h replacement to change between the unix time and a human readable structure inspired from the time.h tm structure.
 
 ### Build With
-
+- [C Unity Tests](https://github.com/ThrowTheSwitch/Unity)
+- GNU Make v4.3
+- gcc v13.3.0
+- [Codecov](https://about.codecov.io/)
+-  LCOV version 2.0-1
 
 ## Getting Started
 
 ### Installation
-Include the library into your project. 
+Include the lib directory library into your project. 
 
 ## Usage
 To handle times in a MCU without the recourse intensive time.h library.
 It is used to handle unix time and human readable time in an efficient way.
-
-## Contributing
-
 
 ## License
 Distributed under the GNU general public license.
