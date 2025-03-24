@@ -1,0 +1,4 @@
+ignore:
+  - "unity" 
+  - "tests"
+  - "test_*"
