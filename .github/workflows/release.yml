@@ -21,8 +21,8 @@ jobs:
 
       - name: Create Release Directory
         run: |
-          zip -r "RELEASE" lib/
-          zip "RELEASE"  LICENSE README.md
+          zip -r ${{ env.RELEASE }} lib/
+          zip ${{ env.RELEASE }}  LICENSE README.md
 
       - name: Release new library version
         uses: softprops/action-gh-release@v2
