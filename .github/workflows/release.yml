@@ -31,5 +31,6 @@ jobs:
           name: "Release ${{ github.ref_name }}"
           generate_release_notes: true
           files: ${{ env.RELEASE }}
+          body_path: "release_notes.md"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
