@@ -5,6 +5,9 @@ on:
     tags:
       - "v*"  # Trigger for new versions in tags
 
+permissions:  
+  contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
