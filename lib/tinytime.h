@@ -144,6 +144,8 @@ uint8_t tiny_isLeapYear(const uint16_t year);
  */
 uint8_t tiny_getMonthDays(const uint16_t year, const uint8_t month);
 
+uint64_t tiny_convertSeconds(const uint64_t seconds, uint32_t *days, uint32_t *hours, uint32_t *mins);
+
 #ifdef __cplusplus
 }
 #endif
