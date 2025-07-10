@@ -23,6 +23,8 @@
 
 #include "tinytime.h"
 #include "unity.h"
+
+#include <stdbool.h>
 #include <string.h>
 
 /* timeType and Unix time base */
@@ -216,6 +218,51 @@ void test_getFormat(void) {
   TEST_ASSERT_EQUAL_STRING("Month  13 not in range", tiny_getFormat(&wrongValues));
 }
 
+void test_convertSeconds(void) {
+
+  typedef struct {
+    uint64_t inputSeconds;
+    bool use_days;
+    bool use_hours;
+    bool use_mins;
+    uint64_t expectedDays;
+    uint64_t expectedHours;
+    uint64_t expectedMins;
+    uint64_t expectedRemaining;
+  } convertSeconds_testCase;
+
+  convertSeconds_testCase tests[] = {
+      {987654, true, true, true, 11, 10, 20, 54},
+      {987654, false, true, true, 0, 274, 20, 54},
+      {987654, false, false, true, 0, 0, 16460, 54},
+      {987654, false, false, false, 0, 0, 0, 987654},
+      {86400, true, true, true, 1, 0, 0, 0},
+      {3661, false, true, true, 0, 1, 1, 1},
+      {59, true, true, true, 0, 0, 0, 59},
+      {3600, false, true, false, 0, 1, 0, 0},
+      {60, false, false, true, 0, 0, 1, 0},
+      {0, true, true, true, 0, 0, 0, 0}};
+
+  for (size_t i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {
+    convertSeconds_testCase *test = &tests[i];
+    uint64_t days = 0, hours = 0, mins = 0;
+    uint64_t *p_days = test->use_days ? &days : NULL;
+    uint64_t *p_hours = test->use_hours ? &hours : NULL;
+    uint64_t *p_mins = test->use_mins ? &mins : NULL;
+    TEST_ASSERT_EQUAL_UINT64(test->expectedRemaining, tiny_convertSeconds(test->inputSeconds, p_days, p_hours, p_mins));
+
+    if (p_days) {
+      TEST_ASSERT_EQUAL_UINT64(test->expectedDays, *p_days);
+    }
+    if (p_hours) {
+      TEST_ASSERT_EQUAL_UINT64(test->expectedHours, *p_hours);
+    }
+    if (p_mins) {
+      TEST_ASSERT_EQUAL_UINT64(test->expectedMins, *p_mins);
+    }
+  }
+}
+
 int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_isLeapYear);
@@ -223,5 +270,6 @@ int main(void) {
   RUN_TEST(test_getUnixTime);
   RUN_TEST(test_getTimeType);
   RUN_TEST(test_getFormat);
+  RUN_TEST(test_convertSeconds);
   return UNITY_END();
 }

@@ -209,17 +209,17 @@ uint8_t tiny_getMonthDays(const uint16_t year, const uint8_t month) {
 uint64_t tiny_convertSeconds(const uint64_t seconds, uint64_t *days, uint64_t *hours, uint64_t *mins) {
   uint64_t remainingSeconds = seconds;
   // Check days if passed
-  if (NULL != days) {
+  if (days) {
     *days = (remainingSeconds / TINY_ONE_DAY_IN_SEC);
     remainingSeconds %= TINY_ONE_DAY_IN_SEC;
   }
   // check hour if passed
-  if (NULL != hours) {
+  if (hours) {
     *hours = remainingSeconds / TINY_ONE_HOUR_IN_SEC;
     remainingSeconds %= TINY_ONE_HOUR_IN_SEC;
   }
   // Check minutes if passed
-  if (NULL != mins) {
+  if (mins) {
     *mins = remainingSeconds / TINY_ONE_MIN_IN_SEC;
     remainingSeconds %= TINY_ONE_MIN_IN_SEC;
   }
