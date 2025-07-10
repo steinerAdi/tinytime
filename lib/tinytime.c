@@ -36,6 +36,8 @@
  */
 #define IS_NOT_IN_RANGE(CHECK, MIN, MAX) ((CHECK) < (MIN) || (CHECK) > (MAX))
 
+#define IS_BIGGER(CHECK, MAX) ((CHECK) > (MAX))
+
 tinyUnixType tiny_getUnixTime(const tinyTimeType *tm) {
 #define CENTURY_CORRECTION_OFFSET (1900)
 #define FOUR_CENTURY_CORRECTION_OFFSET (1600)
@@ -46,9 +48,9 @@ tinyUnixType tiny_getUnixTime(const tinyTimeType *tm) {
     return ERROR_VALUE;
   }
   // Check valid time
-  if (IS_NOT_IN_RANGE(tm->sec, 0, TINY_SEC_MAX) ||
-      IS_NOT_IN_RANGE(tm->min, 0, TINY_MINUTE_MAX) ||
-      IS_NOT_IN_RANGE(tm->hour, 0, TINY_HOUR_MAX)) {
+  if (IS_BIGGER(tm->sec, TINY_SEC_MAX) ||
+      IS_BIGGER(tm->min, TINY_MINUTE_MAX) ||
+      IS_BIGGER(tm->hour, TINY_HOUR_MAX)) {
     return ERROR_VALUE;
   }
   // Check valid year
@@ -117,7 +119,7 @@ const char *tiny_getFormat(const tinyTimeType *tm) {
     return NULL;
   }
 
-#define BUFFER_SIZE (25)
+#define BUFFER_SIZE (32)
   static char formatBuffer[BUFFER_SIZE];
   const char *weekDays[TINY_MAX_WEAKDAYS] = {
       [TINY_SUN] = "Sun",
@@ -153,13 +155,13 @@ const char *tiny_getFormat(const tinyTimeType *tm) {
           TINY_JAN] = "Nov",
       [TINY_DEC -
           TINY_JAN] = "Dec"};
-  if (IS_NOT_IN_RANGE(tm->weakDay, 0, TINY_SAT)) {
+  if (IS_BIGGER(tm->weakDay, TINY_SAT)) {
     snprintf(formatBuffer, BUFFER_SIZE, "Day %3d not in range", tm->weakDay);
   } else if (IS_NOT_IN_RANGE(tm->month, TINY_JAN, TINY_DEC)) {
     snprintf(formatBuffer, BUFFER_SIZE, "Month %3d not in range", tm->month);
   } else {
     snprintf(formatBuffer, BUFFER_SIZE, "%s %2d %s %4d %.2d:%.2d:%.2d",
-        weekDays[tm->weakDay], tm->monthDay, months[tm->month - 1], tm->year, tm->hour, tm->min, tm->sec);
+        weekDays[tm->weakDay], tm->monthDay, months[tm->month - TINY_JAN], tm->year, tm->hour, tm->min, tm->sec);
   }
   return formatBuffer;
 }
@@ -202,4 +204,25 @@ uint8_t tiny_getMonthDays(const uint16_t year, const uint8_t month) {
     return daysPerMonth[month - TINY_JAN] + tiny_isLeapYear(year);
   }
   return daysPerMonth[month - TINY_JAN];
+}
+
+uint64_t tiny_convertSeconds(const uint64_t seconds, uint64_t *days, uint64_t *hours, uint64_t *mins) {
+  uint64_t remainingSeconds = seconds;
+  // Check days if passed
+  if (days) {
+    *days = (remainingSeconds / TINY_ONE_DAY_IN_SEC);
+    remainingSeconds %= TINY_ONE_DAY_IN_SEC;
+  }
+  // check hour if passed
+  if (hours) {
+    *hours = remainingSeconds / TINY_ONE_HOUR_IN_SEC;
+    remainingSeconds %= TINY_ONE_HOUR_IN_SEC;
+  }
+  // Check minutes if passed
+  if (mins) {
+    *mins = remainingSeconds / TINY_ONE_MIN_IN_SEC;
+    remainingSeconds %= TINY_ONE_MIN_IN_SEC;
+  }
+  // return the remaining seconds
+  return remainingSeconds;
 }
