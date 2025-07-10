@@ -36,6 +36,10 @@
  */
 #define IS_NOT_IN_RANGE(CHECK, MIN, MAX) ((CHECK) < (MIN) || (CHECK) > (MAX))
 
+/**
+ * @brief Checks if the CHECK value is bigger than the MAX value
+ *
+ */
 #define IS_BIGGER(CHECK, MAX) ((CHECK) > (MAX))
 
 tinyUnixType tiny_getUnixTime(const tinyTimeType *tm) {

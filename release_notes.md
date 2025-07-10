@@ -1,9 +1,10 @@
-**Release Date:** 24.03.2025
-**Tag:** v0.1.0
-**Highlights:** First release of tested and implemented tiny time library
+**Release Date:** 10.07.2025
+**Tag:** v0.1.1
+**Highlights:** Add new function tiny_convertSeconds for changing from seconds to the desired format
 
 ## Library
-- The library is written in C as an alternative for time.h for converting unix times to human readable times.
+- Added tiny_convertSeconds function to convert seconds to a desired format
+- Add isBigger macro for unsigned variables which always are bigger than 0 instead of IS_NOT_IN_RANGE
 
 ## Tests
-- With C Unity tests, the code is tested to defined times and possible user errors
+- Add unit test for the new function
