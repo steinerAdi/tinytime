@@ -144,6 +144,26 @@ uint8_t tiny_isLeapYear(const uint16_t year);
  */
 uint8_t tiny_getMonthDays(const uint16_t year, const uint8_t month);
 
+/**
+ * @brief Convert the given seconds to the desired format.
+ *
+ * The passed arguments (!= NULL) will be included in the calculation.
+ * Decide by passing only the interesting format as function arguments.
+ *
+ * Example: Pass only days if you need the seconds in days.
+ * Pass hours and minutes if both are interesting.
+ * THe result will be the hours, the minutes (0-59) and returns the remaining seconds.
+ *
+ * The remaining seconds will always be returned.
+ *
+ * @param seconds The seconds to convert
+ * @param days The seconds in days as reference if needed, NULL otherwise
+ * @param hours The seconds in hours as reference if needed, NULL otherwise
+ * @param mins The seconds in minutes as reference if needed, NULL otherwise
+ * @return uint64_t The remaining seconds. The passed seconds in case of non interested conversion
+ */
+uint64_t tiny_convertSeconds(const uint64_t seconds, uint64_t *days, uint64_t *hours, uint64_t *mins);
+
 #ifdef __cplusplus
 }
 #endif
