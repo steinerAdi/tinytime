@@ -42,6 +42,12 @@
  */
 #define IS_BIGGER(CHECK, MAX) ((CHECK) > (MAX))
 
+/**
+ * @brief Checks if the CHECK value is bigger than the MAX value
+ *
+ */
+#define IS_SMALLER(CHECK, MIN) ((CHECK) < (MIN))
+
 tinyUnixType tiny_getUnixTime(const tinyTimeType *tm) {
 #define CENTURY_CORRECTION_OFFSET (1900)
 #define FOUR_CENTURY_CORRECTION_OFFSET (1600)
@@ -58,7 +64,7 @@ tinyUnixType tiny_getUnixTime(const tinyTimeType *tm) {
     return ERROR_VALUE;
   }
   // Check valid year
-  if (IS_NOT_IN_RANGE(tm->year, TINY_UNIX_YEAR_BEGIN, UINT16_MAX)) {
+  if (IS_SMALLER(tm->year, TINY_UNIX_YEAR_BEGIN)) {
     return ERROR_VALUE;
   }
   // Checks a valid day and month
