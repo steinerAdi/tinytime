@@ -81,15 +81,15 @@ typedef struct {
  */
 typedef uint64_t tinyUnixType;
 
-#define TINY_SEC_MAX (59)    ///< Max second value
-#define TINY_MINUTE_MAX (59) ///< Max minute value
-#define TINY_HOUR_MAX (23)   ///< Max hour value
+#define TINY_SEC_MAX ((uint8_t)59)    ///< Max second value
+#define TINY_MINUTE_MAX ((uint8_t)59) ///< Max minute value
+#define TINY_HOUR_MAX ((uint8_t)23)   ///< Max hour value
 
-#define TINY_UNIX_YEAR_BEGIN (1970) ///< Starting year of Unix time epoch
-#define TINY_ONE_MIN_IN_SEC (60)    ///< One minute in seconds
-#define TINY_ONE_HOUR_IN_SEC (3600) ///< One hour in seconds
-#define TINY_ONE_DAY_IN_SEC (86400) ///< One day in seconds
-#define TINY_ONE_YEAR_IN_DAYS (365) ///< One basic year in days
+#define TINY_UNIX_YEAR_BEGIN ((uint16_t)1970) ///< Starting year of Unix time epoch
+#define TINY_ONE_MIN_IN_SEC ((uint8_t)60)     ///< One minute in seconds
+#define TINY_ONE_HOUR_IN_SEC ((uint16_t)3600) ///< One hour in seconds
+#define TINY_ONE_DAY_IN_SEC ((uint32_t)86400) ///< One day in seconds
+#define TINY_ONE_YEAR_IN_DAYS ((uint16_t)365) ///< One basic year in days
 
 /**
  * @brief Get the current unix time from a time

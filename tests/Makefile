@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -Wpedantic -Werror --coverage
+CFLAGS=-Wall -Wextra -Wpedantic -Werror -Wtype-limits --coverage
 LDFLAGS= \
 -I../unity\
 -I../inc
