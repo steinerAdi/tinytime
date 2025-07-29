@@ -1,10 +1,10 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -Wpedantic --coverage
+CFLAGS=-Wall -Wextra -Wpedantic -Werror -Wtype-limits --coverage
 LDFLAGS= \
 -I../unity\
--I../lib 
+-I../inc
 
-SRC=../lib/tinytime.c ../unity/unity.c
+SRC=../src/tinytime.c ../unity/unity.c
 TEST=test_tinyTimeLib.c
 OUT=test_tinyTimeLib
 
