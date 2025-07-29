@@ -21,7 +21,7 @@ jobs:
 
       - name: Create Release Directory
         run: |
-          zip -r ${{ env.RELEASE }} lib/
+          zip -r ${{ env.RELEASE }} src/ inc/
           zip ${{ env.RELEASE }}  LICENSE README.md
 
       - name: Release new library version
