@@ -32,6 +32,6 @@ See [LICENSE](LICENSE) for more information.
 
 ## Author
 
-Adrian STEINER (adi.steiner@hotmail.ch)
+- Adrian STEINER (adi.steiner@hotmail.ch)
 
 ## Acknowledgments
