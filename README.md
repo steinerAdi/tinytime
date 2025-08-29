@@ -12,12 +12,14 @@ This library is a lightweight time.h std library replacement to change between t
 - GNU Make v4.3
 - gcc v13.3.0
 - [Codecov](https://about.codecov.io/)
--  LCOV version 2.0-1
+- LCOV version 2.0-1
 
 ## Getting Started
 
 ### Installation
-Include the lib directory library into your project.
+Include the tinytime directory into your project.
+The header file is located in the [inc](inc/) directory.
+The source file is located in the [src](src/) direcotry.
 There are no additional installation necessary.
 
 ## Usage
@@ -30,6 +32,6 @@ See [LICENSE](LICENSE) for more information.
 
 ## Author
 
-Adrian STEINER (adi.steiner@hotmail.ch)
+- Adrian STEINER (adi.steiner@hotmail.ch)
 
 ## Acknowledgments

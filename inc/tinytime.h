@@ -30,6 +30,13 @@ extern "C" {
 
 #include <stdint.h>
 
+/**
+ * @enum TINY_MONTHS
+ * @brief Enumeration representing the months of the year.
+ *
+ * This enum defines constants for each month, starting from January.
+ * It can be used for indexing or representing months in a compact form.
+ */
 typedef enum {
   TINY_JAN = 1,
   TINY_FEB,
@@ -46,6 +53,13 @@ typedef enum {
   TINY_MAX_MONTHS
 } TINY_MONTHS;
 
+/**
+ * @enum TINY_WEAK_DAYS
+ * @brief Enumeration representing the days of the week.
+ *
+ * This enum defines constants for each day of the week, starting from Sunday.
+ * It can be used for indexing or representing weekdays in a compact form.
+ */
 typedef enum {
   TINY_SUN = 0,
   TINY_MON,
@@ -58,8 +72,12 @@ typedef enum {
 } TINY_WEAK_DAYS;
 
 /**
- * @brief Structure to handle the calendar date and time
+ * @struct tinyTimeType
+ * @brief Structure representing a compact date and time format.
  *
+ * This structure holds basic time and date information, including seconds,
+ * minutes, hours, day of the month, month, year, weekday, and day of the year.
+ * It is useful for lightweight timekeeping applications.
  */
 typedef struct {
   /* Time informations */
@@ -67,7 +85,8 @@ typedef struct {
   uint8_t min;  ///< Minutes after hour ranged from 0 - 59
   uint8_t hour; ///< Hour since midnight ranged from 0 - 23
   /* Date informations */
-  uint8_t monthDay; ///< Day in the month range depending from 1 to the current month
+  uint8_t monthDay; ///< Day in the month range depending from 1 to the current
+                    ///< month
   uint8_t month;    ///< Month of the current year, ranged from 1 - 12
   uint16_t year;    ///< Current year since year 0
   /* Additional Date informations */
@@ -85,8 +104,9 @@ typedef uint64_t tinyUnixType;
 #define TINY_MINUTE_MAX ((uint8_t)59) ///< Max minute value
 #define TINY_HOUR_MAX ((uint8_t)23)   ///< Max hour value
 
-#define TINY_UNIX_YEAR_BEGIN ((uint16_t)1970) ///< Starting year of Unix time epoch
-#define TINY_ONE_MIN_IN_SEC ((uint8_t)60)     ///< One minute in seconds
+#define TINY_UNIX_YEAR_BEGIN                                                   \
+  ((uint16_t)1970)                        ///< Starting year of Unix time epoch
+#define TINY_ONE_MIN_IN_SEC ((uint8_t)60) ///< One minute in seconds
 #define TINY_ONE_HOUR_IN_SEC ((uint16_t)3600) ///< One hour in seconds
 #define TINY_ONE_DAY_IN_SEC ((uint32_t)86400) ///< One day in seconds
 #define TINY_ONE_YEAR_IN_DAYS ((uint16_t)365) ///< One basic year in days
@@ -95,7 +115,8 @@ typedef uint64_t tinyUnixType;
  * @brief Get the current unix time from a time
  *
  * @param tm Base time type to convert to unix time
- * @return tinyUnixType Unix time of the tm time and date or UINT64_MAX in case of an error
+ * @return tinyUnixType Unix time of the tm time and date or UINT64_MAX in case
+ * of an error
  */
 tinyUnixType tiny_getUnixTime(const tinyTimeType *tm);
 
@@ -120,8 +141,10 @@ void tiny_getTimeType(tinyTimeType *tm, const tinyUnixType unixTime);
  *
  * The static c-array buffer has a size of 25.
  *
- * @param tm Pointer to an object of type tinyTimeType that contains a time value
- * @return A 25 byte sized C-string containing the date and time information in a human-readable format.
+ * @param tm Pointer to an object of type tinyTimeType that contains a time
+ * value
+ * @return A 25 byte sized C-string containing the date and time information in
+ * a human-readable format.
  */
 const char *tiny_getFormat(const tinyTimeType *tm);
 
@@ -152,7 +175,8 @@ uint8_t tiny_getMonthDays(const uint16_t year, const uint8_t month);
  *
  * Example: Pass only days if you need the seconds in days.
  * Pass hours and minutes if both are interesting.
- * THe result will be the hours, the minutes (0-59) and returns the remaining seconds.
+ * THe result will be the hours, the minutes (0-59) and returns the remaining
+ * seconds.
  *
  * The remaining seconds will always be returned.
  *
@@ -160,9 +184,13 @@ uint8_t tiny_getMonthDays(const uint16_t year, const uint8_t month);
  * @param days The seconds in days as reference if needed, NULL otherwise
  * @param hours The seconds in hours as reference if needed, NULL otherwise
  * @param mins The seconds in minutes as reference if needed, NULL otherwise
- * @return uint64_t The remaining seconds. The passed seconds in case of non interested conversion
+ * @return uint64_t The remaining seconds. The passed seconds in case of non
+ * interested conversion
  */
-uint64_t tiny_convertSeconds(const uint64_t seconds, uint64_t *days, uint64_t *hours, uint64_t *mins);
+uint64_t tiny_convertSeconds(const uint64_t seconds,
+                             uint64_t *days,
+                             uint64_t *hours,
+                             uint64_t *mins);
 
 #ifdef __cplusplus
 }
